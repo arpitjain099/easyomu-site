@@ -1,7 +1,15 @@
 <!-- python3 manage.py runserver -->
 {% include "base.html" %}
-<br>
-<br><br>
+
+
+<center>
+<label for="languageselect" id="topString"></label>
+<select id="languageselect" onchange="changeLanguage(this.value)">
+    <option value="en">English</option>
+    <option value="jp">日本語</option>
+</select>
+</center>
+
 
 <!-- {{ searchOutput }}fafa -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -9,36 +17,69 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-{{ language }}mannho
-<div class="container">
+<input type="hidden" id="languageVal" name="variable" value="{{ language }}">
+<script type="text/javascript">
+    var topStringData = {
+        'en': 'Change Language:',
+        'jp': '言語を変えてください'
+    }
+    var currentLanguage = document.getElementById("languageVal").value
+    console.log("da")
+    console.log(currentLanguage)
+    document.getElementById("languageselect").value = currentLanguage;
+    document.getElementById("topString").innerHTML = topStringData[currentLanguage];
+    var currentUrl = window.location.href
+    console.log(currentUrl)
 
 
-    
-    <script type="text/javascript"> 
-   var a = "{{ searchOutput }}";
-   console.log(a)
-</script>
+    function changeLanguage(selectedLanguage){
+        console.log(selectedLanguage)
+        
 
-    arpit
-{% for section in searchOutput.sections %}
-    <h1>{{ section.name.en }}</h1><br>
-    
-    <!--
+        /*
+        tempArray = currentUrl.split("/")
+        const regex = RegExp('^[0-9]*$');
+        index = 0
+        for(var i =0 ;i <tempArray.length; i++){
+            if(regex.test(tempArray[i]) && tempArray[i] != ""){
+                index = i;
+                break;
+            }
+        }
+
+        redirectURL = ""
+        for (var i = 0; i < index;i++){
+            redirectURL = redirectURL + tempArray[i]
+        }
+        redirectURL = redirectURL + "/" + selectedLanguage
+        console.log(redirectURL)
+        window.location.replace = redirectURL
+        */
+
+        console.log(currentUrl.substring(0, currentUrl.length - 3) + selectedLanguage)
+        window.location.href  = currentUrl.substring(0, currentUrl.length - 3) + selectedLanguage
+    }
+ </script>
+
+<div class="container">    
+{% for section in output %}
+    <h1>{{ section.sectionName }}</h1>
     <div class="row">
+        
     {% for dish in section.dishes %}
-        <div class="card col-lg-3 d-flex align-items-stretch" style="margin: 1%">
+        <div class="card d-flex align-items-stretch" style="margin: 1%; width:31%;">
             <img src='{{ dish.imageUrl }}' class="img-thumbnail" style="width:100%; height: 75%;">
             <div class="card-body">
                 
-              <h5 class="card-title">{{ dish.title.en }}</h5>
-              <p class="card-text">{{ dish.description.en }}</p>
-              <p class="card-text">{{ dish.price.priceWithoutTax }}</p>
-              <p class="card-text">{{ dish.price.priceWithTax }}</p>
+              <h5 class="card-title">{{ dish.title }}</h5>
+              <p class="card-text">{{ dish.description }}</p>
+              <p class="card-text">{{ dish.priceWithoutTax }}</p>
+              <p class="card-text">{{ dish.priceWithTax }}</p>
             </div>
         </div>
     {% endfor %}
     </div>
-    -->
+    
     <br>
 {% endfor %}
 </div>
