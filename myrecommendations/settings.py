@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'vteego2fmay_fw8d)sh-_u!yxx=bb4j%mmln3i7=!e!c)nn&&s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['adept-button-267707.appspot.com','127.0.0.1','127.0.0.1:8000']
+ALLOWED_HOSTS = ['adept-button-267707.appspot.com','127.0.0.1','127.0.0.1:8000','easyomuwebsite.appspot.com']
 
 
 # Application definition

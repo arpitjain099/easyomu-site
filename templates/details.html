@@ -1,15 +1,8 @@
 <!-- python3 manage.py runserver -->
+<!-- gcloud config set project easyomuwebsite -->
+
+<!-- http://127.0.0.1:8000/news/country/au/topic/business/language/en -->
 {% include "base.html" %}
-
-
-<center>
-<label for="languageselect" id="topString"></label>
-<select id="languageselect" onchange="changeLanguage(this.value)">
-    <option value="en">English</option>
-    <option value="jp">日本語</option>
-</select>
-</center>
-
 
 <!-- {{ searchOutput }}fafa -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -19,67 +12,108 @@
 
 <input type="hidden" id="languageVal" name="variable" value="{{ language }}">
 <script type="text/javascript">
-    var topStringData = {
-        'en': 'Change Language:',
-        'jp': '言語を変えてください'
-    }
-    var currentLanguage = document.getElementById("languageVal").value
-    console.log("da")
-    console.log(currentLanguage)
-    document.getElementById("languageselect").value = currentLanguage;
-    document.getElementById("topString").innerHTML = topStringData[currentLanguage];
+    $( document ).ready(function() {
+        stra = currentUrl.split("country")[1]
+        countryCode = stra.split("topic")[0]
+        countryCode = countryCode.replace("/","")
+        countryCode = countryCode.replace("/","")
+        console.log(countryCode)
+        stra = stra.split("topic")[1]
+        topicCode = stra.split("language")[0]
+        topicCode = topicCode.replace("/","")
+        topicCode = topicCode.replace("/","")
+        console.log(topicCode)
+        stra = stra.split("language")[1]
+        languageCode = stra.replace("/","")
+        languageCode = languageCode.replace("/","")
+        console.log(languageCode)
+        //document.getElementById("pretax")[i].innerHTML = pretaxStringData[currentLanguage];
+        document.getElementById("domainselect").value = topicCode
+        document.getElementById("countryselect").value = countryCode
+        document.getElementById("languageselect").value = languageCode
+});
+
+
+    
+
+    
     var currentUrl = window.location.href
-    console.log(currentUrl)
 
 
-    function changeLanguage(selectedLanguage){
-        console.log(selectedLanguage)
-        
-
-        /*
-        tempArray = currentUrl.split("/")
-        const regex = RegExp('^[0-9]*$');
-        index = 0
-        for(var i =0 ;i <tempArray.length; i++){
-            if(regex.test(tempArray[i]) && tempArray[i] != ""){
-                index = i;
-                break;
-            }
-        }
-
-        redirectURL = ""
-        for (var i = 0; i < index;i++){
-            redirectURL = redirectURL + tempArray[i]
-        }
-        redirectURL = redirectURL + "/" + selectedLanguage
-        console.log(redirectURL)
-        window.location.replace = redirectURL
-        */
-
-        console.log(currentUrl.substring(0, currentUrl.length - 3) + selectedLanguage)
-        window.location.href  = currentUrl.substring(0, currentUrl.length - 3) + selectedLanguage
+    function changeSettings(){
+        currentUrl.split("news")[0]
+        newURL = currentUrl.split("news")[0] + "news/country/" + document.getElementById("countryselect").value + "/topic/" + document.getElementById("domainselect").value + "/language/" + document.getElementById("languageselect").value
+        console.log(newURL)
+        window.location.href  = newURL
     }
  </script>
 
 <div class="container">    
-{% for section in output %}
-    <h1>{{ section.sectionName }}</h1>
-    <div class="row">
+
+<div class="row">
+        <div class="col-md-3" style="margin: 1%;">
+                <label for="domainselect" id="domainselectid">Domain</label>
+                <select id="domainselect" onchange="changeSettings()">
+                    <option value="business">Business</option>
+                    <option value="general">Top Headlines</option>
+                    <option value="technology">Technology</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="health">Health</option>
+                    <option value="science">Science</option>
+                    <option value="sports">Sports</option>
+                </select>
+        </div>
         
-    {% for dish in section.dishes %}
-        <div class="card d-flex align-items-stretch" style="margin: 1%; width:31%;">
-            <img src='{{ dish.imageUrl }}' class="img-thumbnail" style="width:100%; height: 75%;">
+        <div class="col-md-3" style="margin: 1%;">
+                <label for="countryselect" id="countryselectid">Country of Interest</label>
+                <select id="countryselect" onchange="changeSettings()">
+                    <option value="au">Australia</option>
+                    <option value="de">Germany</option>
+                    <option value="fr">France</option>
+                    <option value="cn">China</option>
+                    <option value="it">Italy</option>
+                    <option value="in">India</option>
+                    <option value="jp">Japan</option>
+                    <option value="ru">Russia</option>
+                    <option value="us">USA</option>
+                    <option value="gb">UK</option>
+                </select>
+        </div>
+        
+        <div class="col-md-3" style="margin: 1%;">
+                <label for="languageselect" id="languageselectid">News Language</label>
+                <select id="languageselect" onchange="changeSettings()">
+                        <option value="en">English</option>
+                        <option value="cn">Chinese</option>
+                        <option value="hi">Hindi</option>
+                        <option value="pa">Punjabi</option>
+                        <option value="bn">Bengali</option>
+                        <option value="es">Spanish</option>
+                        <option value="ae">Arabic</option>
+                        <option value="ms">Malay</option>
+                        <option value="ru">Russian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="fr">French</option>
+                        <option value="ja">Japanese</option>
+                </select>
+        </div>
+
+        </div>
+
+        
+    <div class="row">
+    {% for newsarticle in output %}
+        <div class="card" style="margin: 1%; width:31%;">
+            <img src='{{ newsarticle.imageurl }}' class="img-thumbnail" style="width:100%; height: 75%; max-height: 300px; position: relative; display: block;">
             <div class="card-body">
-                
-              <h5 class="card-title">{{ dish.title }}</h5>
-              <p class="card-text">{{ dish.description }}</p>
-              <p class="card-text">{{ dish.priceWithoutTax }}</p>
-              <p class="card-text">{{ dish.priceWithTax }}</p>
+              <h5 class="card-title">{{ newsarticle.title }}</h5>
+              <p class="card-text"><a href="{{ newsarticle.url  }}" target="_blank">{{ newsarticle.readmore }}</a> </p>
+              <p class="card-text"><a href="{{ newsarticle.translatedurl  }}" target="_blank">{{ newsarticle.translation }}</a> </p>
             </div>
         </div>
     {% endfor %}
     </div>
     
     <br>
-{% endfor %}
+
 </div>

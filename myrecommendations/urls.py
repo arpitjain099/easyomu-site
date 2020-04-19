@@ -20,5 +20,6 @@ from . import views
 from django.conf.urls import url
 
 urlpatterns = [
-    path('<slug:restaurantId>/<slug:language>/', views.details, name='details'),
+    path('news/country/<slug:country>/topic/<slug:topic>/language/<slug:language>/', views.details, name='details'),
+    path('', views.index, name='index'),
 ]
