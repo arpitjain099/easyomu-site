@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import UpdateView
 from django.utils import timezone
+from django.http import JsonResponse
+
 
 
 import os
@@ -106,8 +108,7 @@ def translation(key):
         key = "翻訳"
     return key
 
-
-def details(request, country, language, topic):
+def processOutput(country, language, topic):
     print(country)
     key = processLanguage(language)
     #searchOutput = articledata.find_one({'topic': topic, 'countryCode': country})
@@ -124,18 +125,90 @@ def details(request, country, language, topic):
     for newsArticleObject in reversed(searchOutput):
         #tempJson = {}
         #newsArticleObject[key] + "- " + newsArticleObject['contentPublisher'] + "<br>" + readMore(language) + newsArticleObject['url'] + "<br>" + translation(language) + "https://translate.google.com/translate?sl=auto&tl=" + language + "&u=" + urlparse(newsArticleObject(newsArticleObject['url']))
-        outputJson = {}
-        outputJson['imageurl'] = newsArticleObject['urlToImage']
-        outputJson['title'] = newsArticleObject[key] + "- " + newsArticleObject['contentPublisher']
-        outputJson['readmore'] = readMore(language)
-        outputJson['translation'] = translation(language)
-        outputJson['url'] = newsArticleObject['url']
-        outputJson['translatedurl'] = "https://translate.google.com/translate?sl=auto&tl=" + language + "&u=" + urllib.parse.quote_plus(newsArticleObject['url'])
-        #print(outputJson['url'])
-        
-        outputList.append(outputJson)
+        try:
+            outputJson = {}
+            outputJson['imageurl'] = newsArticleObject['urlToImage']
+            outputJson['title'] = newsArticleObject[key] + "- " + newsArticleObject['contentPublisher']
+            outputJson['readmore'] = readMore(language)
+            outputJson['translation'] = translation(language)
+            outputJson['url'] = newsArticleObject['url']
+            outputJson['translatedurl'] = "https://translate.google.com/translate?sl=auto&tl=" + language + "&u=" + urllib.parse.quote_plus(newsArticleObject['url'])
+            #print(outputJson['url'])
+            outputList.append(outputJson)
+        except Exception as er:
+            print(er)
+            continue
     outputList = {'output': outputList, 'language': language}
+    #print(outputList)
+    return outputList
+
+def details(request, country, language, topic):
+    outputList = processOutput(country, language, topic)
     return render(request, 'details.html', outputList)
 
 def index(request):
     return render(request, 'index.html')
+
+
+# will be phased out soon
+def api(request, country, language, topic):
+    users_list = {
+        "status": "ok",
+        "articles": [
+        {
+            "title": "title",
+            "author": "author",
+            "urlToImage": "https://www.jing.fm/clipimg/detail/65-656431_spongebob-clipart-random-guy-spongebob-squarepants-png.png",
+            "description": "description",
+            "publishedAt": "2020-04-19T16:57:00Z",
+            "content": "content content",
+            "articleUrl": "https://newsapi.org/"
+        },
+        {
+            "title": "title",
+            "author": "author",
+            "urlToImage": "https://www.jing.fm/clipimg/detail/65-656431_spongebob-clipart-random-guy-spongebob-squarepants-png.png",
+            "description": "description",
+            "publishedAt": "2020-04-19T16:57:00Z",
+            "content": "content content",
+            "articleUrl": "https://newsapi.org/"
+        }
+    ]
+    }
+    tempVar = processOutput('us', 'ja', 'health')
+    print(tempVar)
+    outputJSON = {}
+    outputJSON['status'] = 'ok'
+    
+    count = 0
+    emptyArray = []
+    for i in tempVar['output']:
+        print(i)
+        emptyArray.append(i)
+        if count == 10000:
+            break
+        count = count + 1
+    outputJSON['articles'] = emptyArray
+    #tempVar['output']
+
+    return JsonResponse(outputJSON, safe=False)
+
+# latest api
+def apiv2(request, country, language, topic):
+    tempVar = processOutput(country, language, topic)
+    print(tempVar)
+    outputJSON = {}
+    outputJSON['status'] = 'ok'
+    
+    count = 0
+    emptyArray = []
+    for i in tempVar['output']:
+        print(i)
+        emptyArray.append(i)
+        if count == 10000:
+            break
+        count = count + 1
+    outputJSON['articles'] = emptyArray
+    #tempVar['output']
+
+    return JsonResponse(outputJSON, safe=False)

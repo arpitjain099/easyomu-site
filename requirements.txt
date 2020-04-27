@@ -23,3 +23,6 @@ soupsieve==2.0
 sqlparse==0.3.1
 typed-ast==1.4.0
 wrapt==1.11.2
+djangorestframework
+django-snippet
+pygments
