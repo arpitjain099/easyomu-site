@@ -52,6 +52,14 @@ def processLanguage(key):
         key = "translatedTextFrench"
     elif key == "ja":
         key = "translatedTextJapanese"
+    elif key == "sw":
+        key = "translatedTextSwahili"
+    elif key == "vi":
+        key = "translatedTextVietnamese"
+    elif key == "ne":
+        key = "translatedTextNepali"
+    elif key == "ko":
+        key = "translatedTextKorean"
     return key
 
 def readMore(key):
@@ -79,6 +87,14 @@ def readMore(key):
         key = "Lire la suite"
     elif key == "ja":
         key = "続きを読む"
+    elif key == "sw":
+        key = "Soma zaidi"
+    elif key == "vi":
+        key = "Đọc thêm"
+    elif key == "ne":
+        key = "थप पढ्नुहोस्"
+    elif key == "ko":
+        key = "더 읽어보기"
     return key
 
 def translation(key):
@@ -106,6 +122,14 @@ def translation(key):
         key = "Traduction"
     elif key == "ja":
         key = "翻訳"
+    elif key == "sw":
+        key = "Tafsiri"
+    elif key == "vi":
+        key = "Dịch"
+    elif key == "ne":
+        key = "अनुवाद"
+    elif key == "ko":
+        key = "번역"
     return key
 
 def processOutput(country, language, topic):
@@ -148,6 +172,9 @@ def details(request, country, language, topic):
 
 def index(request):
     return render(request, 'index.html')
+
+def privacy(request):
+    return render(request, 'privacy.html')
 
 
 # will be phased out soon

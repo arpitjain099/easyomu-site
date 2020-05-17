@@ -21,6 +21,7 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('news/country/<slug:country>/topic/<slug:topic>/language/<slug:language>/', views.details, name='details'),
+    path('privacy', views.privacy, name='privacy'),
     path('', views.index, name='index'),
     path('news/api/<slug:country>/topic/<slug:topic>/language/<slug:language>/', views.api, name='api'),
     path('news/apiv2/<slug:country>/topic/<slug:topic>/language/<slug:language>/', views.apiv2, name='apiv2'),
